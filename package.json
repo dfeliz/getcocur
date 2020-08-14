@@ -1,0 +1,20 @@
+{
+  "name": "getcocur",
+  "version": "1.0.0",
+  "description": "A simple app that gets current Unphu events and notifies if theres a new one based on the previous",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Feliz",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^9.1.2"
+  },
+  "dependencies": {
+    "auto-launch": "^5.0.5",
+    "lodash": "^4.17.19",
+    "node-fetch": "^2.6.0"
+  }
+}
