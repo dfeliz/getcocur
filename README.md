@@ -2,7 +2,7 @@
 Aplicación de escritorio que notifica cuando hay nuevos eventos cocurriculares de la UNPHU.
 
 ## ¿Por qué?
-Porque si no, no nos graduamos xD. Además, por que no? :p
+Porque si no, no nos graduamos xD las charlas se llenan demasiado rápido. Además, por que no? :p
 
 ## ¿Cómo?
 Magia: electron.js
