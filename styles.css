@@ -1,8 +1,15 @@
-#container {
+body {
     margin: 4px;
+}
+
+#container {
     display: flex;
 }
 
 #container > button {
     margin-right: 4px;
+}
+
+#status {
+    color: #007bff;
 }

@@ -1,3 +1,7 @@
+/**
+ *  Not in use. Meant to start app with windows.
+ */
+
 var AutoLaunch = require('auto-launch');
 
 var getcocur = new AutoLaunch({

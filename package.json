@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "auto-launch": "^5.0.5",
-    "lodash": "^4.17.19",
-    "node-fetch": "^2.6.0"
+    "lodash": "^4.17.19"
   }
 }

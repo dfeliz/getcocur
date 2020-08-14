@@ -1,8 +1,9 @@
 const fs = require('fs');
 const _ = require('lodash');
-const Errors = require('./scripts/errors');
-const Constants = require('./constants');
 const electron = require('electron');
+const Constants = require('./constants');
+const Messages = require('./scripts/messages');
+const StatusChanger = require('./scripts/status-changer');
 
 start();
 var timer;
@@ -11,16 +12,22 @@ function start() {
     const fileExists = fs.existsSync('./scripts/data/credentials.json');
     if (fileExists) {
         try {
-            const { username, password }  = readCredentialsFromFile();
-            postData(username, password);
+            const { username, password } = readCredentialsFromFile();
+            authenticate(username, password);
             checkEvents();
         } catch (err) {
-            alert('ERR! ', alert);
+            alert('ERR! ' + err.toString());
         }
     } else {
-        Errors.showNoCredentialsAlert();
+        Messages.showNoCredentialsAlert();
     }
 
+}
+
+function onCheckClick() {
+    const checkBtn = document.getElementById("check-btn");
+    checkBtn.disabled = true;
+    checkEvents();
 }
 
 function readCredentialsFromFile() {
@@ -28,7 +35,7 @@ function readCredentialsFromFile() {
     return JSON.parse(credentials);
 }
 
-function postData(username, password) {
+function authenticate(username, password) {
     const requestInit = {
         method: 'POST',
         headers: {
@@ -40,10 +47,11 @@ function postData(username, password) {
             'remember': 'on'
         }),
     }
-
+    StatusChanger.setLoggingInStatus();
     fetch('https://cocurriculares.unphu.edu.do/login', requestInit)
         .then((response) => response.json())
         .then((response) => {
+            StatusChanger.setStandByStatus();
             console.log(response);
         })
 }
@@ -51,6 +59,7 @@ function postData(username, password) {
 function checkPeriodically(mins) {
     const period = mins * 60 * 1000;
     timer = setInterval(checkEvents, period);
+    StatusChanger.setTimerStatus();
     alert(`Se buscarán eventos nuevos cada ${mins} minutos.`);
 
     const periodicCheckBtn = document.getElementById('periodic-check-btn');
@@ -66,13 +75,21 @@ function stopChecking() {
 
     const periodicCheckBtn = document.getElementById('periodic-check-btn');
     const stopCheckBtn = document.getElementById('stop-check-btn');
+
     periodicCheckBtn.style.display = 'inline-block';
     stopCheckBtn.style.display = 'none';
 }
 
 async function checkEvents() {
+    const checkBtn = document.getElementById("check-btn");
+    StatusChanger.setFetchingStatus();
+
     return await fetch('https://cocurriculares.unphu.edu.do/ultimos-eventos')
-        .then((response) => response.json())
+        .then((response) => {
+            StatusChanger.setStandByStatus();
+            checkBtn.disabled = false;
+            return response.json()
+        })
         .then((response) => compareWithPrevious(response))
 }
 
@@ -103,6 +120,7 @@ function writeToFile(data) {
 module.exports =  {
     start,
     checkEvents,
+    onCheckClick,
     stopChecking,
     checkPeriodically,
 };

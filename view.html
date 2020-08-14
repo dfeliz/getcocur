@@ -7,15 +7,16 @@
     <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
-    <script type="text/javascript" src="./app.js"></script>
-
+    
   </head>
   <body>
     <div id="container">
-      <button class="btn btn-primary" onclick="checkEvents()">Revisar ahora</button>
+      <button id="check-btn" class="btn btn-primary" disabled onclick="onCheckClick()">Revisar ahora</button>
       <button id="periodic-check-btn" class="btn btn-success" onclick="checkPeriodically(15)">Revisar cada 15 minutos</button>
       <button id="stop-check-btn" style="display: none;" class="btn btn-danger" onclick="stopChecking()">Dejar de revisar</button>
     </div>
+    <p>Estado: <span id="status">En pausa</span></p>
 
+    <script type="text/javascript" src="./app.js"></script>
   </body>
 </html>
