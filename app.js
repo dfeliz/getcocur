@@ -1,6 +1,6 @@
 const fs = require('fs');
 const _ = require('lodash');
-const Errors = require('./errors');
+const Errors = require('./scripts/errors');
 const Constants = require('./constants');
 const electron = require('electron');
 
@@ -8,7 +8,7 @@ start();
 var timer;
 
 function start() {
-    const fileExists = fs.existsSync('credentials.json');
+    const fileExists = fs.existsSync('./scripts/data/credentials.json');
     if (fileExists) {
         try {
             const { username, password }  = readCredentialsFromFile();
@@ -24,7 +24,7 @@ function start() {
 }
 
 function readCredentialsFromFile() {
-    const credentials = fs.readFileSync('credentials.json');
+    const credentials = fs.readFileSync('./scripts/data/credentials.json');
     return JSON.parse(credentials);
 }
 
@@ -77,10 +77,10 @@ async function checkEvents() {
 }
 
 function compareWithPrevious(data) {
-    const fileExists = fs.existsSync('events.json')
+    const fileExists = fs.existsSync('./scripts/data/events.json')
 
     if (fileExists) {
-        const previousData = JSON.parse(fs.readFileSync('events.json'));
+        const previousData = JSON.parse(fs.readFileSync('./scripts/data/events.json'));
 
         if (!_.isEqual(previousData, data)) {
             if (window.confirm(`HAY NUEVO EVENTO! ¿Ir a inscribirse?`)) {
@@ -97,7 +97,7 @@ function compareWithPrevious(data) {
 }
 
 function writeToFile(data) {
-    fs.writeFileSync('events.json', JSON.stringify(data));
+    fs.writeFileSync('./scripts/data/events.json', JSON.stringify(data));
 }
  
 module.exports =  {

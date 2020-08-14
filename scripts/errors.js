@@ -1,4 +1,4 @@
-const constants = require('./constants');
+const constants = require('../constants');
 
 function showNoCredentialsAlert() {
     alert(constants.NO_CREDENTIALS.join('\r\n'))
