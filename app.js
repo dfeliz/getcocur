@@ -54,6 +54,9 @@ function authenticate(username, password) {
             StatusChanger.setStandByStatus();
             console.log(response);
         })
+        .catch((err) => {
+            throw err
+        });
 }
 
 function checkPeriodically(mins) {
@@ -84,13 +87,16 @@ async function checkEvents() {
     const checkBtn = document.getElementById("check-btn");
     StatusChanger.setFetchingStatus();
 
-    return await fetch('https://cocurriculares.unphu.edu.do/ultimos-eventos')
+    return await fetch('https://cocurriculares.unphu.edu.do/eventos/busqueda')
         .then((response) => {
             StatusChanger.setStandByStatus();
             checkBtn.disabled = false;
             return response.json()
         })
         .then((response) => compareWithPrevious(response))
+        .catch((err) => {
+            throw err
+        });
 }
 
 function compareWithPrevious(data) {
