@@ -108,10 +108,10 @@ function compareWithPrevious(data) {
         if (!_.isEqual(previousData, data)) {
             if (window.confirm(`HAY NUEVO EVENTO! ¿Ir a inscribirse?`)) {
                 window.location.href = `${Constants.COCUR_HOST}${data[0].slug}`;
+                const currentWindow = electron.remote.getCurrentWindow();
+                currentWindow.setSize(1366, 768);
+                currentWindow.setPosition(0, 0);
             }
-            const currentWindow = electron.remote.getCurrentWindow();
-            currentWindow.setSize(1366, 768);
-            currentWindow.setPosition(0, 0);
         }
     } else {
         alert('Primer chequeo! :o. Guardando últimos eventos...');
