@@ -106,6 +106,7 @@ function compareWithPrevious(data) {
         const previousData = JSON.parse(fs.readFileSync('./scripts/data/events.json'));
 
         if (!_.isEqual(previousData, data)) {
+            const newEvent = getNewEvent(previousData, data);
             if (window.confirm(`HAY NUEVO EVENTO! ¿Ir a inscribirse?`)) {
                 window.location.href = `${Constants.COCUR_HOST}${data[0].slug}`;
                 const currentWindow = electron.remote.getCurrentWindow();
@@ -117,6 +118,10 @@ function compareWithPrevious(data) {
         alert('Primer chequeo! :o. Guardando últimos eventos...');
     }
     writeToFile(data);
+}
+
+function getNewEvent(previousData, newData) {
+    console.log(_.intersectionWith(previousData, newData, _.isEqual));
 }
 
 function writeToFile(data) {
