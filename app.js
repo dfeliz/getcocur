@@ -2,6 +2,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const electron = require('electron');
 const Constants = require('./constants');
+const Mapper = require('./utils/mapper');
 const Messages = require('./scripts/messages');
 const StatusChanger = require('./scripts/status-changer');
 
@@ -91,24 +92,27 @@ async function checkEvents() {
         .then((response) => {
             StatusChanger.setStandByStatus();
             checkBtn.disabled = false;
-            return response.json()
+            return response.json();
         })
-        .then((response) => compareWithPrevious(response))
+        .then((response) => {
+            const mappedResponse = Mapper.mapToSlugArray(response);
+            return compareWithPrevious(mappedResponse)
+        })
         .catch((err) => {
             throw err
         });
 }
 
-function compareWithPrevious(data) {
+function compareWithPrevious(fetchedData) {
     const fileExists = fs.existsSync('./scripts/data/events.json')
 
     if (fileExists) {
-        const previousData = JSON.parse(fs.readFileSync('./scripts/data/events.json'));
+        const localData = JSON.parse(fs.readFileSync('./scripts/data/events.json'));
 
-        if (!_.isEqual(previousData, data)) {
-            const newEvent = getNewEvent(previousData, data);
+        if (!_.isEqual(localData, fetchedData)) {
+            const newEvent = getNewEvent(localData, fetchedData);
             if (window.confirm(`HAY NUEVO EVENTO! ¿Ir a inscribirse?`)) {
-                window.location.href = `${Constants.COCUR_HOST}${data[0].slug}`;
+                window.location.href = `${Constants.COCUR_HOST}${newEvent}`;
                 const currentWindow = electron.remote.getCurrentWindow();
                 currentWindow.setSize(1366, 768);
                 currentWindow.setPosition(0, 0);
@@ -117,11 +121,26 @@ function compareWithPrevious(data) {
     } else {
         alert('Primer chequeo! :o. Guardando últimos eventos...');
     }
-    writeToFile(data);
+    writeToFile(fetchedData);
 }
 
-function getNewEvent(previousData, newData) {
-    console.log(_.intersectionWith(previousData, newData, _.isEqual));
+function getNewEvent(localData, fetchedData) {
+    let newEvent;
+
+    for (let event of fetchedData) {
+        let found = false;
+        for (let oldEvent of localData) {
+            if (event === oldEvent) {
+                found = true;
+                continue
+            }
+        }
+        if (!found) {
+            newEvent = event;
+        }
+    }
+
+    return newEvent;
 }
 
 function writeToFile(data) {
