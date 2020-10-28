@@ -11,4 +11,4 @@ Magia: electron.js
 Perfecto! Entonces, sigue estos pasos:
 
 1. Corre `npm install` para instalar las dependencias.
-2. Corre `npm start` para iniciar la aplicación.
+2. Corre `npm start` o ejecuta `run.sh` para iniciar la aplicación.
